@@ -14,69 +14,62 @@ class Extractor:
         self.json = {}
         self.storage = self.get_definition
 
-
     def get_definition(self, input_word):
         url = f'https://api.dictionaryapi.dev/api/v2/entries/en/{input_word}'
-        response = requests.get(url )
-        connect = sqlite3.connect("database.db")
-        cursor = connect.cursor()
-        cursor.execute('''
-            SELECT COUNT (*) FROM vocabulary WHERE word = ?
-        ''', (input_word.upper(), ))
-        result = cursor.fetchone()
-        connect.commit()
-        connect.close()
-        if result[0] > 0:
-            return "Word already in dictionary"
-        elif response.status_code == 200:
-            self.response = response.json()
-            word = input_word.upper()
-            record_date = self.date
-            try:
-                phonetics = self.response[0]['phonetic']
-            except KeyError:
-                phonetics = "not found"
-            definition = self.response[0]['meanings'][0]['definitions'][0]['definition']
-            try:
-                example = self.response[0]['meanings'][0]['definitions'][0]['example']
-            except KeyError:
-                example = "No example found."
-            increment = 1
-            return record_date, word, phonetics, definition, example, increment
-        else:
-            return "Unable to find"
+        response = requests.get(url)
+        with sqlite3.connect("database.db") as connect:
+            cursor = connect.cursor()
+            cursor.execute('''
+                SELECT COUNT (*) FROM vocabulary WHERE word = ?
+            ''', (input_word.upper(), ))
+            result = cursor.fetchone()
+            if result[0] > 0:
+                return "Word already in dictionary"
+            elif response.status_code == 200:
+                self.response = response.json()
+                word = input_word.upper()
+                record_date = self.date
+                try:
+                    phonetics = self.response[0]['phonetic']
+                except KeyError:
+                    phonetics = "not found"
+                definition = self.response[0]['meanings'][0]['definitions'][0]['definition']
+                try:
+                    example = self.response[0]['meanings'][0]['definitions'][0]['example']
+                except KeyError:
+                    example = "No example found."
+                increment = 1
+                return record_date, word, phonetics, definition, example, increment
+            else:
+                return "Unable to find"
 
     def save_word(self, array):
         if len(array) == 6:
-            connection = sqlite3.connect("database.db")
-            cursor = connection.cursor()
-            cursor.execute('''
-                   INSERT INTO vocabulary (date, word, phonetics, definition, example, increment)
-                   VALUES (?, ?, ?, ?, ?, ?);
-               ''', (array[0], array[1], array[2], array[3], array[4], array[5]))
-            print("successfully saved")
-            connection.commit()
-            connection.close()
+            with sqlite3.connect("database.db") as connection:
+                cursor = connection.cursor()
+                cursor.execute('''
+                       INSERT INTO vocabulary (date, word, phonetics, definition, example, increment)
+                       VALUES (?, ?, ?, ?, ?, ?);
+                   ''', (array[0], array[1], array[2], array[3], array[4], array[5]))
+                print("successfully saved")
         else:
             print(array)
 
     def create_database(self):
-        connect = sqlite3.connect("database.db")
-        cursor = connect.cursor()
-        cursor.execute('''
-            CREATE TABLE IF NOT EXISTS vocabulary
-            (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            date TEXT,
-            word TEXT,
-            phonetics TEXT,
-            definition TEXT,
-            example TEXT,
-            increment INT
-            )
-        ''')
-        connect.commit()
-        connect.close()
+        with sqlite3.connect("database.db") as connect:
+            cursor = connect.cursor()
+            cursor.execute('''
+                    CREATE TABLE IF NOT EXISTS oxford3000
+                    (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    date TEXT,
+                    word TEXT,
+                    phonetics TEXT,
+                    definition TEXT,
+                    example TEXT,
+                    increment INT
+                    )
+                ''')
 
     def create_clean_data_table(self):
         with sqlite3.connect("database.db") as connect:
@@ -92,8 +85,7 @@ class Extractor:
             example TEXT
             )
         ''')
-        # connect.commit()
-        # connect.close()
+
 
     def pull_random_card(self):
         with sqlite3.connect("database.db") as connect:

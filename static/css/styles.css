@@ -1,0 +1,14 @@
+#appname {
+    margin-left: 3rem; /* Adjust the margin as needed */
+}
+
+.custom-width {
+    width: 100%; /* Adjust or use a specific value like 1200px */
+    max-width: 1200px; /* Optional: set a max-width */
+    margin: 0 auto; /* Center the container if needed */
+}
+
+.centered-div {
+  width: 18rem;
+  height: auto;
+}
