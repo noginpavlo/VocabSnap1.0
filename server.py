@@ -4,6 +4,8 @@ from extractor import Extractor
 
 app = Flask(__name__)
 
+extractor = Extractor()
+
 
 @app.route("/")
 def home():
@@ -15,11 +17,10 @@ def create():
     return render_template("create.html")
 
 
-@app.route("/learn")
-def learn():
-    extractor = Extractor()
-    body_text = extractor.get_definition("demolition")
-    return render_template("learn.html", body=body_text)
+@app.route("/learn_front")
+def learn_front():
+    extract_front, extract_back = extractor.make_card(extractor.pull_random_card())
+    return render_template("learn.html", back=extract_back, front=extract_front)
 
 
 if __name__ == "__main__":

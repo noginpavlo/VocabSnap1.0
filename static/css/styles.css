@@ -1,14 +1,83 @@
+/* Navbar App Name Styling */
 #appname {
-    margin-left: 3rem; /* Adjust the margin as needed */
+    font-size: 1.8rem;
+    font-weight: bold;
 }
 
-.custom-width {
-    width: 100%; /* Adjust or use a specific value like 1200px */
-    max-width: 1200px; /* Optional: set a max-width */
-    margin: 0 auto; /* Center the container if needed */
+/* Flip Card Container */
+.flip-card {
+    width: 350px; /* Increased width */
+    height: auto; /* Height adjusts based on content */
+    perspective: 1000px; /* 3D perspective for flip effect */
 }
 
-.centered-div {
-  width: 18rem;
-  height: auto;
+.flip-card-inner {
+    position: relative;
+    width: 100%;
+    height: auto;
+    transition: transform 0.6s; /* Smooth flip animation */
+    transform-style: preserve-3d;
+    min-height: 300px; /* Ensure a minimum height */
+}
+
+/* Flip the card when 'flipped' class is applied */
+.flipped .flip-card-inner {
+    transform: rotateY(180deg); /* Flip effect */
+}
+
+/* Front and Back of the Card */
+.card-front, .card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden; /* Hide the back side when flipped */
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Align content to the top */
+    flex-direction: column;
+    padding: 1.5rem;
+}
+
+/* Card Border and Styling */
+.flip-card-inner {
+    border: 2px solid #007bff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Back of the card is hidden and flipped initially */
+.card-back {
+    transform: rotateY(180deg); /* Rotate the back by 180deg initially */
+    background-color: #007bff; /* Blue background for back */
+    color: white;
+}
+
+/* Customize Card Typography */
+.card-front h5, .card-back h5 {
+    font-size: 1.5rem; /* Adjusted for more space */
+    text-align: center;
+}
+
+.card-front p, .card-back p {
+    font-size: 1.1rem; /* Adjusted font size */
+    text-align: justify; /* Text justified for better readability */
+    margin: 0.5rem 0; /* Slight margin for better text flow */
+}
+
+/* Ensure enough space and alignment for text inside the card */
+.card-text {
+    margin-bottom: 1rem;
+    word-wrap: break-word; /* Ensure long text wraps within the card */
+    line-height: 1.5; /* Adjust line height for better readability */
+}
+
+/* Buttons for card actions */
+#button-container {
+    display: none; /* Initially hidden until the card is flipped */
+}
+
+/* Buttons styling */
+#button-container .btn {
+    margin-top: 0.5rem; /* Spacing between buttons */
 }

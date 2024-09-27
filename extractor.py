@@ -91,13 +91,14 @@ class Extractor:
         with sqlite3.connect("database.db") as connect:
             cursor = connect.cursor()
             cursor.execute('''
-                SELECT MAX(id) FROM vocabulary
-            ''')
-            result = cursor.fetchone()
-            max_id = result[0]
-        random_word_id = 1
-        if max_id >= 1:
-            random_word_id = random.randint(1, max_id)
+                SELECT  id FROM vocabulary WHERE date <= ?
+            ''', (date.today(), ))
+            result = cursor.fetchall()
+
+            if not result:
+                raise ValueError("No cards available for the given date condition.")
+
+            random_word_id = random.choice(result)[0]
         return random_word_id
 
     def make_card(self, card_id):
@@ -130,7 +131,6 @@ class Extractor:
                 pass
             else:
                 compose_string += f"\nExample: {example}"
-            print(compose_string)
             return compose_string
 
         front = create_front(word_title)
