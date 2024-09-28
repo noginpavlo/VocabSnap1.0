@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, datetime, timedelta
 import requests
 import random
 import sqlite3
@@ -20,8 +20,8 @@ class Extractor:
         with sqlite3.connect("database.db") as connect:
             cursor = connect.cursor()
             cursor.execute('''
-                SELECT COUNT (*) FROM vocabulary WHERE word = ?
-            ''', (input_word.upper(), ))
+                                SELECT COUNT (*) FROM vocabulary WHERE word = ?
+                            ''', (input_word.upper(), ))
             result = cursor.fetchone()
             if result[0] > 0:
                 return "Word already in dictionary"
@@ -48,10 +48,9 @@ class Extractor:
             with sqlite3.connect("database.db") as connection:
                 cursor = connection.cursor()
                 cursor.execute('''
-                       INSERT INTO vocabulary (date, word, phonetics, definition, example, increment)
-                       VALUES (?, ?, ?, ?, ?, ?);
-                   ''', (array[0], array[1], array[2], array[3], array[4], array[5]))
-                print("successfully saved")
+                                   INSERT INTO vocabulary (date, word, phonetics, definition, example, increment)
+                                   VALUES (?, ?, ?, ?, ?, ?);
+                               ''', (array[0], array[1], array[2], array[3], array[4], array[5]))
         else:
             print(array)
 
@@ -59,40 +58,40 @@ class Extractor:
         with sqlite3.connect("database.db") as connect:
             cursor = connect.cursor()
             cursor.execute('''
-                    CREATE TABLE IF NOT EXISTS oxford3000
-                    (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    date TEXT,
-                    word TEXT,
-                    phonetics TEXT,
-                    definition TEXT,
-                    example TEXT,
-                    increment INT
-                    )
-                ''')
+                            CREATE TABLE IF NOT EXISTS oxford3000
+                            (
+                            id INTEGER PRIMARY KEY AUTOINCREMENT,
+                            date TEXT,
+                            word TEXT,
+                            phonetics TEXT,
+                            definition TEXT,
+                            example TEXT,
+                            increment INT
+                            )
+                        ''')
 
     def create_clean_data_table(self):
         with sqlite3.connect("database.db") as connect:
             cursor = connect.cursor()
             cursor.execute('''
-            CREATE TABLE IF NOT EXISTS words_for_today
-            (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            date TEXT,
-            word TEXT,
-            phonetics TEXT,
-            definition TEXT,
-            example TEXT
-            )
-        ''')
+                        CREATE TABLE IF NOT EXISTS words_for_today
+                        (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        date TEXT,
+                        word TEXT,
+                        phonetics TEXT,
+                        definition TEXT,
+                        example TEXT
+                        )
+                    ''')
 
 
     def pull_random_card(self):
         with sqlite3.connect("database.db") as connect:
             cursor = connect.cursor()
             cursor.execute('''
-                SELECT  id FROM vocabulary WHERE date <= ?
-            ''', (date.today(), ))
+                            SELECT  id FROM vocabulary WHERE date <= ?
+                        ''', (date.today(), ))
             result = cursor.fetchall()
 
             if not result:
@@ -105,8 +104,8 @@ class Extractor:
         with sqlite3.connect("database.db") as connect:
             cursor = connect.cursor()
             cursor.execute('''
-                SELECT * FROM vocabulary WHERE id = ? AND date <= ?
-                    ''', (card_id, date.today()))
+                        SELECT * FROM vocabulary WHERE id = ? AND date <= ?
+                            ''', (card_id, date.today()))
             row = cursor.fetchall()
 
             word_title = row[0][2]
@@ -114,26 +113,70 @@ class Extractor:
             word_definition = row[0][4]
             word_example = row[0][5]
 
-        def create_front(word):
-            word = word.capitalize()
-            print(word)
-            return word
+        return word_title, word_phonetics, word_definition, word_example
 
-        def create_back(title, phonetics, definition, example):
-            compose_string = ""
-            compose_string += f"{title.upper()}"
-            if phonetics == "not found":
-                pass
-            else:
-                compose_string += f"\nPhonetics: {phonetics}"
-            compose_string += f"\nDefinition: {definition}"
-            if example == "No example found.":
-                pass
-            else:
-                compose_string += f"\nExample: {example}"
-            return compose_string
+    def easy_scale(self, word):
+        with sqlite3.connect("database.db") as connect:
+            easy_increment = 3
+            cursor = connect.cursor()
+            cursor.execute('''
+                            SELECT increment FROM vocabulary WHERE word = ?
+                        ''', (word, ))
 
-        front = create_front(word_title)
-        back = create_back(word_title, word_phonetics, word_definition, word_example)
+            current_day_count = cursor.fetchone()
+            days_to_add = current_day_count[0] * easy_increment
 
-        return front, back
+            cursor.execute('''
+                            UPDATE vocabulary
+                            SET increment = ?
+                            WHERE word = ?
+                        ''', (days_to_add, word))
+
+            connect.commit()
+
+            date_object = datetime.strptime(self.date, "%Y-%m-%d")
+            new_date_object = date_object + timedelta(days=days_to_add)
+            new_date_string = new_date_object.strftime("%Y-%m-%d")
+
+            cursor.execute('''
+                            UPDATE vocabulary
+                            SET date = ?
+                            WHERE word = ?
+                        ''', (new_date_string, word))
+
+            connect.commit()
+
+
+    def medium_scale(self, word):
+        with sqlite3.connect("database.db") as connect:
+            medium_increment = 1
+            cursor = connect.cursor()
+            cursor.execute('''
+                            SELECT increment FROM vocabulary WHERE word = ?
+                        ''', (word,))
+
+            current_day_count = cursor.fetchone()
+            days_to_add = current_day_count[0] * medium_increment
+
+            cursor.execute('''
+                            UPDATE vocabulary
+                            SET increment = ?
+                            WHERE word = ?
+                        ''', (days_to_add, word))
+
+            connect.commit()
+
+            date_object = datetime.strptime(self.date, "%Y-%m-%d")
+            new_date_object = date_object + timedelta(days=days_to_add)
+            new_date_string = new_date_object.strftime("%Y-%m-%d")
+
+            cursor.execute('''
+                            UPDATE vocabulary
+                            SET date = ?
+                            WHERE word = ?
+                        ''', (new_date_string, word))
+
+            connect.commit()
+
+    def hard_scale(self, word):
+        pass

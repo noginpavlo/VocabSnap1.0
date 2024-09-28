@@ -10,42 +10,59 @@
             integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
     </script>
     <!-- External CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/create.css') }}">
 </head>
 <body>
 
-<div class="px-3 py-2 text-bg-dark border-bottom">
-    <div class="container">
-        <div class="d-flex flex-wrap align-items-center justify-content-end">
-            <a href="/" class="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none
-                  nav-link text-white fs-3 fw-bold">
-                <img class="icons d-block mx-auto mb-1" src="{{ url_for('static', filename='./icons/vs.png') }}" height="80">
-                <p id="appname">VocabSnap</p>
-            </a>
+<div class="px-3 py-2 text-bg-dark border-bottom w-100"> <!-- Full width -->
+    <div class="custom-bg">
+        <!-- Navigation -->
+        <div class="navbar navbar-dark bg-dark px-3 py-2">
+            <div class="container">
+                <a href="/" class="navbar-brand d-flex align-items-center">
+                    <img src="{{ url_for('static', filename='./icons/vs.png') }}" height="60" alt="VocabSnap">
+                    <span id="appname" class="ms-3">VocabSnap</span>
+                </a>
+                <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
+                    <li>
+                        <a href="#" class="nav-link text-white">
+                            <img class="icons d-block mx-auto mb-1" src="{{ url_for('static', filename='./icons/home.png') }}" height="40">
+                            Home
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('create') }}" class="nav-link text-white">
+                            <img class="icons d-block mx-auto mb-1" src="{{ url_for('static', filename='./icons/createcards.png') }}" height="40">
+                            Create cards
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('learn_front') }}" class="nav-link text-white">
+                            <img class="icons d-block mx-auto mb-1" src="{{ url_for('static', filename='./icons/learn.png') }}" height="40">
+                            Learn
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div> <!-- Close custom-bg div -->
+</div> <!-- Close navbar div -->
 
-            <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
-                <li>
-                    <a href="#" class="nav-link text-white">
-                        <img class="icons d-block mx-auto mb-1" src="{{ url_for('static', filename='./icons/home.png') }}" height="40">
-                        Home
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="nav-link text-white">
-                        <img class="icons d-block mx-auto mb-1" src="{{ url_for('static', filename='./icons/createcards.png') }}" height="40">
-                        Create cards
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="nav-link text-white">
-                        <img class="icons d-block mx-auto mb-1" src="{{ url_for('static', filename='./icons/learn.png') }}" height="40">
-                        Learn
-                    </a>
-                </li>
-            </ul>
+<div class="container d-flex flex-grow-1 justify-content-center align-items-center"> <!-- Centering the input -->
+    <div class="row w-100"> <!-- Full width for row -->
+        <div class="col-md-6 mx-auto"> <!-- Center the column -->
+            <div class="input-container"> <!-- Input container -->
+                <form>
+                    <div class="form-group">
+                        <label for="userInput">Enter your input:</label>
+                        <input type="text" class="form-control" id="userInput" placeholder="Type here...">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Create Card</button>
+                </form>
+            </div>
         </div>
     </div>
 </div>
-<p>Create</p>
+
 </body>
 </html>

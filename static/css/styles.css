@@ -40,7 +40,7 @@
 
 /* Card Border and Styling */
 .flip-card-inner {
-    border: 2px solid #007bff;
+    border: 2px solid #433D8B;
     border-radius: 10px;
     padding: 20px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
@@ -49,7 +49,7 @@
 /* Back of the card is hidden and flipped initially */
 .card-back {
     transform: rotateY(180deg); /* Rotate the back by 180deg initially */
-    background-color: #007bff; /* Blue background for back */
+    background-color: #433D8B; /* Blue background for back */
     color: white;
 }
 
@@ -81,3 +81,26 @@
 #button-container .btn {
     margin-top: 0.5rem; /* Spacing between buttons */
 }
+
+.custom-bg {
+  background-color: #FFE1FF;
+}
+
+.custom-easy {
+  background-color: #E4B1F0;
+  border-color: #E4B1F0;
+  color: white; /* Adjust text color if needed */
+}
+
+.custom-medium {
+  background-color: #7E60BF;
+  border-color: #7E60BF;
+  color: white; /* Adjust text color if needed */
+}
+
+.custom-hard {
+  background-color: #433878;
+  border-color: #433878;
+  color: white; /* Adjust text color if needed */
+}
+

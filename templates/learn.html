@@ -12,60 +12,78 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
-    <!-- Navigation -->
-    <div class="navbar navbar-dark bg-dark px-3 py-2">
-        <div class="container">
-            <a href="/" class="navbar-brand d-flex align-items-center">
-                <img src="{{ url_for('static', filename='./icons/vs.png') }}" height="60" alt="VocabSnap">
-                <span id="appname" class="ms-3">VocabSnap</span>
-            </a>
-            <ul class="nav">
-                <li class="nav-item">
-                    <a href="/" class="nav-link text-white">
-                        <img src="{{ url_for('static', filename='./icons/home.png') }}" height="40" alt="Home"> Home
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link text-white">
-                        <img src="{{ url_for('static', filename='./icons/createcards.png') }}" height="40" alt="Create"> Create Cards
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link text-white">
-                        <img src="{{ url_for('static', filename='./icons/learn.png') }}" height="40" alt="Learn"> Learn
-                    </a>
-                </li>
-            </ul>
+    <div class="custom-bg">
+        <!-- Navigation -->
+        <div class="navbar navbar-dark bg-dark px-3 py-2">
+            <div class="container">
+                <a href="/" class="navbar-brand d-flex align-items-center">
+                    <img src="{{ url_for('static', filename='./icons/vs.png') }}" height="60" alt="VocabSnap">
+                    <span id="appname" class="ms-3">VocabSnap</span>
+                </a>
+                <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
+                    <li>
+                        <a href="#" class="nav-link text-white">
+                            <img class="icons d-block mx-auto mb-1" src="{{ url_for('static', filename='./icons/home.png') }}" height="40">
+                            Home
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('create') }}" class="nav-link text-white">
+                            <img class="icons d-block mx-auto mb-1" src="{{ url_for('static', filename='./icons/createcards.png') }}" height="40">
+                            Create cards
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('learn_front') }}" class="nav-link text-white">
+                            <img class="icons d-block mx-auto mb-1" src="{{ url_for('static', filename='./icons/learn.png') }}" height="40">
+                            Learn
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </div>
-    </div>
 
-    <!-- Flip Card Section -->
-    <div class="d-flex justify-content-center align-items-center vh-100">
-        <div class="flip-card" id="flip-card">
-            <div class="flip-card-inner">
-                <!-- Front of the card -->
-                <div class="card-front card-body">
-                    <h5 class="card-title">{{ front }}</h5>
-                    <p class="card-text">This is the front of the card.</p>
+        <!-- Flip Card Section -->
+        <div class="d-flex justify-content-center align-items-center vh-100">
+            <div class="flip-card" id="flip-card">
+                <div class="flip-card-inner">
+                    <!-- Front of the card -->
+                    <div class="card-front card-body">
+                        <h5 class="card-title">{{ title }}</h5>
+                        <p class="card-text"></p>
+                    </div>
+
+                    <!-- Back of the card -->
+                    <div class="card-back card-body">
+                        <h5 class="card-title">{{ title }}</h5>
+                        <p class="card-text">{{ phonetics }}</p><br />
+                        <p class="card-text">{{ definition }}</p><br />
+                        <p class="card-text">{{ example }}</p>
+                    </div>
                 </div>
 
-                <!-- Back of the card -->
-                <div class="card-back card-body">
-                    <h5 class="card-title">Back of Card</h5>
-                    <p class="card-text">{{ back }}</p>
+                <!-- Buttons after the card flips -->
+                <div class="text-center mt-3" id="button-container" style="display: none;">
+                    <form action="{{ url_for('easy_scale') }}" method="POST" class="mb-2">
+                        <input type="hidden" name="w_title" value="{{ title }}"> <!-- Hidden input for w_title -->
+                        <button type="submit" class="btn btn-success w-100 custom-easy">Easy</button>
+                    </form>
+
+                    <form action="{{ url_for('medium_scale') }}" method="POST" class="mb-2">
+                        <input type="hidden" name="w_title" value="{{ title }}"> <!-- Hidden input for w_title -->
+                        <button type="submit" class="btn btn-warning w-100 custom-medium">Medium</button>
+                    </form>
+
+                    <form action="{{ url_for('hard_scale') }}" method="POST">
+                        <input type="hidden" name="w_title" value="{{ title }}"> <!-- Hidden input for w_title -->
+                        <button type="submit" class="btn btn-danger w-100 custom-hard">Hard</button>
+                    </form>
                 </div>
-            </div>
 
-            <!-- Buttons after the card flips -->
-            <div class="text-center mt-3" id="button-container" style="display: none;">
-                <button id="easy-button" class="btn btn-success w-100 mb-2">Easy</button>
-                <button id="medium-button" class="btn btn-warning w-100 mb-2">Medium</button>
-                <button id="hard-button" class="btn btn-danger w-100">Hard</button>
-            </div>
-
-            <!-- Flip Button -->
-            <div class="text-center mt-3">
-                <button id="flip-button" class="btn btn-primary w-100">Flip card</button>
+                <!-- Flip Button -->
+                <div class="text-center mt-3">
+                    <button id="flip-button" class="btn btn-primary w-100">Flip card</button>
+                </div>
             </div>
         </div>
     </div>
@@ -82,10 +100,6 @@
         });
 
         // Add your functionality for buttons here
-        document.getElementById('easy-button').addEventListener('click', function() {
-            alert('Easy button functionality goes here!');
-        });
-
         document.getElementById('medium-button').addEventListener('click', function() {
             alert('Medium button functionality goes here!');
         });
