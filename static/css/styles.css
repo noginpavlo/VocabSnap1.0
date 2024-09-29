@@ -104,3 +104,15 @@
   color: white; /* Adjust text color if needed */
 }
 
+/* Custom styles to center text under icons */
+.nav-link {
+    text-align: center; /* Center text */
+    display: flex; /* Use flexbox */
+    flex-direction: column; /* Stack icon and text vertically */
+    align-items: center; /* Center align items */
+}
+
+.icons {
+    display: block; /* Ensure icons are block level */
+    margin: 0 auto; /* Center the icon */
+}

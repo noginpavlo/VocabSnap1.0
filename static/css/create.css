@@ -35,3 +35,15 @@ body {
 .form-group {
     margin-bottom: 15px; /* Space between label/input and button */
 }
+
+
+
+/* Custom styles to center text under icons */
+.nav-link {
+    text-align: center; /* Center text */
+}
+
+.icons {
+    display: block; /* Ensure icons are block level */
+    margin: 0 auto; /* Center the icon */
+}
