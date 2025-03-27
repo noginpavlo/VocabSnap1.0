@@ -54,6 +54,7 @@ class Extractor:
         else:
             print(array)
 
+
     def create_database(self):
         with sqlite3.connect("database.db") as connect:
             cursor = connect.cursor()
@@ -90,7 +91,7 @@ class Extractor:
         with sqlite3.connect("database.db") as connect:
             cursor = connect.cursor()
             cursor.execute('''
-                            SELECT  id FROM vocabulary WHERE date <= ?
+                            SELECT id FROM vocabulary WHERE date <= ?
                         ''', (date.today(), ))
             result = cursor.fetchall()
 
